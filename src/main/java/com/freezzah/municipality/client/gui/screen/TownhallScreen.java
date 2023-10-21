@@ -1,88 +1,104 @@
 package com.freezzah.municipality.client.gui.screen;
 
 import com.freezzah.municipality.client.Localization;
-import com.freezzah.municipality.entity.Inhabitant;
-import com.freezzah.municipality.network.handler.ModPacketHandler;
+import com.freezzah.municipality.municipality.IMunicipality;
 import com.freezzah.municipality.network.packet.CreateTownhallPacket;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
-import static com.freezzah.municipality.Constants.MOD_ID;
-import static com.freezzah.municipality.client.Localization.BUTTON_TEXT_CREATE_TOWNHALL;
-
-public class TownhallScreen extends Screen {
-
-    private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(MOD_ID, "textures/gui/container/townhall_screen.png");
-    private static final ResourceLocation TEXTURE =
-            new ResourceLocation(MOD_ID, "textures/gui/townhall.png");
-    private final BlockPos blockPos;
-    private final Inhabitant inhabitant;
-    private boolean renderEmptyName = false;
-
-
-    private EditBox nameBox;
-    int totalHeightOffset = 0;
+public class TownhallScreen extends MunicipalityScreen {
+    private int totalHeightOffset;
+    IMunicipality municipality;
+    int textWidth = 20;
+    int textHeight = 10;
     int editBoxWidth = 150;
     int editBoxHeight = 20;
-    int textWidth = 10;
-    int textHeight = 10;
-    int createButtonWidth = 150;
-    int createButtonHeight = 20;
+    private int offsetText = 60;
+    private StringWidget municipalityNameFieldLabel;
+    private StringWidget municipalityNameField;
+    private StringWidget centerFieldLabel;
+    private StringWidget centerField;
+    private int marginText = 15;
 
-
-    public TownhallScreen(Component title, Inhabitant inhabitant, BlockPos blockPos) {
-        super(title);
-        this.inhabitant = inhabitant;
-        this.blockPos = blockPos;
+    public TownhallScreen(IMunicipality municipality, Component component) {
+        super(component);
+        this.municipality = municipality;
+        totalHeightOffset = 0;
     }
 
     @Override
     protected void init() {
         super.init();
 
-        renderMunicipalityNameTextBox();
+        renderMunicipalityFieldLabel();
+        renderMunicipalityField();
 
-        renderMunicipalityNameBox();
+        renderCenterFieldLabel();
+        renderCenterField();
 
-        renderCreateButton();
+        renderPlayerFieldLabel();
+        renderPlayerField();
     }
 
-    private void renderMunicipalityNameTextBox() {
-        addRenderableWidget(
-                new net.minecraft.client.gui.components.StringWidget(calcXMid(textWidth),
-                        totalHeightOffset + calcYTop(textHeight) + 10,
+    private void renderMunicipalityFieldLabel() {
+        municipalityNameFieldLabel = addRenderableWidget(
+                new net.minecraft.client.gui.components.StringWidget(calcXMid(textWidth) - offsetText,
+                        totalHeightOffset + calcYTop(textHeight) + marginText,
                         textWidth,
                         textHeight,
                         Component.literal(Localization.TEXT_MUNICIPALITY_NAME),
                         this.font));
-        totalHeightOffset += textHeight + 10;
     }
 
-    private void renderMunicipalityNameBox() {
-        nameBox = addRenderableWidget(
-                new EditBox(
-                        this.font,
-                        calcXMid(editBoxWidth),
-                        calcYTop(editBoxHeight) + 10,
-                        editBoxWidth,
-                        editBoxHeight,
-                        Component.literal("")));
+    private void renderMunicipalityField() {
+        municipalityNameField = addRenderableWidget(
+                new net.minecraft.client.gui.components.StringWidget(calcXMid(textWidth) + offsetText,
+                        totalHeightOffset + calcYTop(textHeight) + marginText,
+                        textWidth,
+                        textHeight,
+                        Component.literal(municipality.getMunicipalityName()),
+                        this.font));
         totalHeightOffset += editBoxHeight + 10;
     }
 
-    private void renderCreateButton() {
-        addRenderableWidget(new Button.Builder(
-                Component.literal(BUTTON_TEXT_CREATE_TOWNHALL),
-                button -> this.sendToServer(new CreateTownhallPacket(inhabitant.getUUID(), blockPos, nameBox.getValue())))
-                .size(createButtonWidth, createButtonHeight)
-                .pos(calcXMid(createButtonWidth), totalHeightOffset + calcYTop(createButtonHeight) + 10)
-                .build());
-        totalHeightOffset += createButtonHeight + 10;
+    private void renderCenterFieldLabel() {
+        centerFieldLabel = addRenderableWidget(
+                new net.minecraft.client.gui.components.StringWidget(calcXMid(textWidth) - offsetText,
+                        totalHeightOffset + calcYTop(textHeight) + marginText,
+                        textWidth,
+                        textHeight,
+                        Component.literal(Localization.TEXT_MUNICIPALITY_CENTER),
+                        this.font));
+    }
+    private void renderCenterField() {
+        centerField = addRenderableWidget(
+                new net.minecraft.client.gui.components.StringWidget(calcXMid(textWidth) + offsetText,
+                        totalHeightOffset + calcYTop(textHeight) + marginText,
+                        textWidth,
+                        textHeight,
+                        Component.literal(String.format("%d, %d, %d",
+                                municipality.getTownhallBlockPos().getX(),
+                                municipality.getTownhallBlockPos().getY(),
+                                municipality.getTownhallBlockPos().getZ())),
+                        this.font));
+        totalHeightOffset += editBoxHeight + 10;
+    }
+
+    private void renderPlayerFieldLabel() {
+        addRenderableWidget(
+                new net.minecraft.client.gui.components.StringWidget(calcXMid(textWidth) - offsetText,
+                        totalHeightOffset + calcYTop(textHeight) + marginText,
+                        textWidth,
+                        textHeight,
+                        Component.literal(Localization.TEXT_MUNICIPALITY_PLAYERS),
+                        this.font));
+        totalHeightOffset += textHeight + 10;
+    }
+
+    private void renderPlayerField() {
+
     }
 
     @Override
@@ -92,29 +108,6 @@ public class TownhallScreen extends Screen {
     }
 
     private <MSG> void sendToServer(CreateTownhallPacket msg){
-        if(msg.getTownhallName() == null || msg.getTownhallName() == ""){
-            //TODO name empty
-            return;
-        }
-        else ModPacketHandler.INSTANCE.sendToServer(msg);
-        this.onClose();
-    }
 
-
-    private int calcXMid(int width) {
-        int mid = this.width / 2;
-        int result = mid - width / 2;
-        return result;
-    }
-
-    private int calcYMid(int height) {
-        int mid = this.height / 2;
-        int result = mid - height / 2;
-        return result;
-    }
-
-    private int calcYTop(int height) {
-        int top = height;
-        return top;
     }
 }

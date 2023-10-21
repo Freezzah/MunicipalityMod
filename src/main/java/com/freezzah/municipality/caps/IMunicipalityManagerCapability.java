@@ -65,4 +65,6 @@ public interface IMunicipalityManagerCapability {
     boolean existMunicipalityAtBlock(BlockPos pos);
 
     void addMunicipality(IMunicipality municipality);
+
+    IMunicipality getMunicipalityByBlockPos(BlockPos pos);
 }

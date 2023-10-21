@@ -13,6 +13,8 @@ public class Localization {
     public static final String SCREEN_BANK_NAME = "Bank";
     public static final String TOWNHALL_NAME_NOT_EMPTY = "Townhall name cannot be empty";
     public static final String TEXT_MUNICIPALITY_NAME = "Municipality Name";
+    public static final String TEXT_MUNICIPALITY_PLAYERS = "Players";
+    public static final String TEXT_MUNICIPALITY_CENTER = "Townhall location";
 
     public static String MUNICIPALITY_NEW_OWNER(String municipalityName, Component oldOwnerName, Component newOwnerName) {
         return String.format("%s has transferred the ownership of %s to %s", oldOwnerName, municipalityName, newOwnerName);

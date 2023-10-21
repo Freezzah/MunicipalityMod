@@ -53,11 +53,13 @@ public class Municipality implements IMunicipality {
         if (world != null) {
             this.dimensionId = world.dimension();
         }
+        setDirty(true);
     }
 
     public Municipality(UUID id, Level world, BlockPos townhallBlockPos) {
         this(id, world);
         this.townhallBlockPos = townhallBlockPos;
+        setDirty(true);
     }
 
     public static IMunicipality load(CompoundTag tag, Level level) {
@@ -93,6 +95,7 @@ public class Municipality implements IMunicipality {
             owner = inhabitant;
         }
         inhabitants.add(inhabitant);
+        setDirty(true);
     }
 
     @Override
@@ -135,6 +138,7 @@ public class Municipality implements IMunicipality {
             inhabitants.add(inhabitant);
         }
         this.owner = inhabitant;
+        setDirty(true);
     }
 
 

@@ -3,6 +3,7 @@ package com.freezzah.municipality.caps;
 import com.freezzah.municipality.entity.Inhabitant;
 import com.freezzah.municipality.municipality.IMunicipality;
 import com.freezzah.municipality.municipality.Municipality;
+import com.mojang.datafixers.kinds.IdF;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -60,5 +61,10 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
     @Override
     public void addMunicipality(IMunicipality municipality) {
         municipalities.add(municipality);
+    }
+
+    @Override
+    public IMunicipality getMunicipalityByBlockPos(BlockPos pos) {
+        return municipalities.stream().filter(municipality -> municipality.getTownhallBlockPos().equals(pos)).findFirst().orElse(null);
     }
 }
