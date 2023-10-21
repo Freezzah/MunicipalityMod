@@ -44,7 +44,7 @@ public class OpenVacantTownhallViewPacket {
         );
     }
 
-    public UUID getPlayerUid() {
+    public UUID getPlayerUuid() {
         return playerUid;
     }
 

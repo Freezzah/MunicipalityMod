@@ -1,5 +1,6 @@
 package com.freezzah.municipality.caps;
 
+import com.freezzah.municipality.entity.Inhabitant;
 import com.freezzah.municipality.municipality.IMunicipality;
 import com.freezzah.municipality.municipality.Municipality;
 import net.minecraft.core.BlockPos;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface IMunicipalityManagerCapability {
 
@@ -22,7 +24,9 @@ public interface IMunicipalityManagerCapability {
 
     static Tag writeNbt(Capability<IMunicipalityManagerCapability> municipalityManagerCapability, IMunicipalityManagerCapability municipalityCapManager) {
         final CompoundTag compoundTag = new CompoundTag();
-        compoundTag.put(TAG_MUNICIPALITIES, municipalityCapManager.getMunicipalities().stream().map(IMunicipality::getMunicipalityTag).filter(Objects::nonNull).collect(toListNBT()));
+        List<IMunicipality> municipalities = municipalityCapManager.getMunicipalities();
+        Stream<CompoundTag> tags = municipalities.stream().map(IMunicipality::getMunicipalityTag);
+        compoundTag.put(TAG_MUNICIPALITIES, tags.filter(Objects::nonNull).collect(toListNBT()));
         return compoundTag;
     }
 
@@ -50,11 +54,15 @@ public interface IMunicipalityManagerCapability {
                 });
     }
 
-    Municipality createMunicipality(Level level, BlockPos blockPos);
+    Municipality createMunicipalityWithPlayer(Level level, BlockPos blockPos, Player player, String townhallName);
 
     List<IMunicipality> getMunicipalities();
 
+
+    IMunicipality getInhabitantInAnyMunicipality(Inhabitant inhabitant);
     IMunicipality getPlayerInAnyMunicipality(Player player);
+
+    boolean existMunicipalityAtBlock(BlockPos pos);
 
     void addMunicipality(IMunicipality municipality);
 }

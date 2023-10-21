@@ -4,16 +4,21 @@ import com.freezzah.municipality.Constants;
 import com.freezzah.municipality.blocks.IMunicipalityBlock;
 import com.freezzah.municipality.blocks.TownhallBlock;
 import com.freezzah.municipality.blocks.entity.TownHallBlockEntity;
+import com.freezzah.municipality.caps.MunicipalityManagerCapabilityProvider;
 import com.freezzah.municipality.client.Localization;
+import com.mojang.datafixers.kinds.Const;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -60,13 +65,22 @@ public class EventHandler {
             Block block = event.getState().getBlock();
             if (event.getEntity() instanceof Player) {
                 if (block instanceof IMunicipalityBlock iMunicipalityBlock) {
-
                     shouldCancel = false; //todo
                 }
             }
         }
         if (event.isCancelable() && shouldCancel) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void attachCapabilityEvent(AttachCapabilitiesEvent<Level> event) {
+        if (event.getObject().dimension().equals(Level.OVERWORLD)) {
+                event.addCapability(new ResourceLocation(Constants.MOD_ID, "municipality"), new MunicipalityManagerCapabilityProvider());
+
+        } else {
+            LOGGER.info("Not overworld");
         }
     }
 }

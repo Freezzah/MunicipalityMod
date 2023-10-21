@@ -2,6 +2,7 @@ package com.freezzah.municipality.items;
 
 import com.freezzah.municipality.caps.IMunicipalityManagerCapability;
 import com.freezzah.municipality.client.Localization;
+import com.freezzah.municipality.entity.Inhabitant;
 import com.freezzah.municipality.municipality.IMunicipality;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -31,10 +32,10 @@ public class MunicipalityKey extends Item {
                             () -> new IllegalArgumentException("LazyOptional must not be empty!")
                     );
             IMunicipality municipality = cap.getPlayerInAnyMunicipality(player);
-            if (municipality.isOwner(player)) {
+            if (municipality.isOwner(Inhabitant.fromPlayer(player))) {
                 Player targetPlayer = (Player) livingEntity;
-                municipality.setOwner(targetPlayer);
-                for (Player member : municipality.getPlayers()) {
+                municipality.setOwner(Inhabitant.fromPlayer(targetPlayer));
+                for (Player member : municipality.getInhabitantsAsPlayers(player.level())) {
                     member.sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_OWNER(
                             municipality.getMunicipalityName(),
                             player.getName(), targetPlayer.getName())));
