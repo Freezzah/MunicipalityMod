@@ -9,6 +9,5 @@ public class PlayerCapabilityEvent {
     public void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         // Register the PlayerMana capability class
         event.register(IMunicipalityManagerCapability.class);
-        System.out.println("x");
     }
 }

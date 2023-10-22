@@ -11,27 +11,24 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import static com.freezzah.municipality.MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY;
 
 public class MunicipalityKey extends Item {
-
-    public MunicipalityKey(Properties properties) {
-        super(properties);
-    }
 
     public MunicipalityKey() {
         super(new Properties());
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity livingEntity, InteractionHand interactionHand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack itemStack, @NotNull Player player, @NotNull LivingEntity livingEntity, @NotNull InteractionHand interactionHand) {
         if (livingEntity instanceof Player) {
             IMunicipalityManagerCapability cap =
                     player.level().getCapability(MUNICIPALITY_MANAGER_CAPABILITY).orElseThrow(
                             () -> new IllegalArgumentException("LazyOptional must not be empty!")
                     );
-            IMunicipality municipality = cap.getPlayerInAnyMunicipality(player);
+            IMunicipality municipality = cap.getMunicipalityByInhabitant(Inhabitant.fromPlayer(player));
             if (municipality.isOwner(Inhabitant.fromPlayer(player))) {
                 Player targetPlayer = (Player) livingEntity;
                 municipality.setOwner(Inhabitant.fromPlayer(targetPlayer));

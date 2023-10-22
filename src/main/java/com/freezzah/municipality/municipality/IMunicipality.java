@@ -3,12 +3,11 @@ package com.freezzah.municipality.municipality;
 import com.freezzah.municipality.entity.Inhabitant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IMunicipality {
     String getMunicipalityName();
@@ -17,13 +16,9 @@ public interface IMunicipality {
 
     List<Inhabitant> getInhabitants();
 
-    void addInhabitant(Inhabitant inhabitant);
+    int getHappiness();
 
-    UUID getId();
-
-    ResourceKey<Level> getDimensionId();
-
-    Inhabitant getOwner();
+    FriendlyByteBuf putInByteBuf(FriendlyByteBuf friendlyByteBuf);
 
     CompoundTag getMunicipalityTag();
 

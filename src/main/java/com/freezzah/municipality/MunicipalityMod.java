@@ -33,6 +33,8 @@ public class MunicipalityMod {
         FMLJavaModLoadingContext.get().getModEventBus().register(new ModEventHandler());
         FMLJavaModLoadingContext.get().getModEventBus().register(new PlayerCapabilityEvent());
         MinecraftForge.EVENT_BUS.register(new EventHandler());
+        modEventBus.addListener(EventHandler::clientSetup);
+
 
         LOGGER.info("Municipality: Registring items");
         ModItem.register(modEventBus);

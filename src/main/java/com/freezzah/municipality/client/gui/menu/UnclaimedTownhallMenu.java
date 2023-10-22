@@ -1,8 +1,7 @@
 package com.freezzah.municipality.client.gui.menu;
 
 import com.freezzah.municipality.blocks.ModBlock;
-import com.freezzah.municipality.municipality.IMunicipality;
-import com.freezzah.municipality.municipality.Municipality;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,17 +11,15 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class TownhallMenu extends AbstractContainerMenu {
+public class UnclaimedTownhallMenu extends AbstractContainerMenu {
 
+    private final BlockPos blockPos;
     private final ContainerLevelAccess access;
-    private IMunicipality municipality;
 
-    public TownhallMenu(int containerId, Inventory inv, FriendlyByteBuf buf) {
-        super(ModMenuType.TOWNHALL_MENU.get(), containerId);
+    public UnclaimedTownhallMenu(int containerId, Inventory inv, FriendlyByteBuf buf) {
+        super(ModMenuType.UNCLAIMED_TOWNHALL_MENU.get(), containerId);
         access = ContainerLevelAccess.NULL;
-        if (!(buf.readerIndex() == 0 && buf.writerIndex() == 0)) {
-            this.municipality = Municipality.fromFriendlyByteBuf(buf);
-        }
+        this.blockPos = buf.readBlockPos();
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
@@ -39,7 +36,7 @@ public class TownhallMenu extends AbstractContainerMenu {
         return AbstractContainerMenu.stillValid(this.access, player, ModBlock.TOWNHALL_BLOCK.get());
     }
 
-    public IMunicipality getMunicipality() {
-        return municipality;
+    public BlockPos getBlockPos() {
+        return blockPos;
     }
 }

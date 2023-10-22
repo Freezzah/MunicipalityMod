@@ -14,6 +14,7 @@ public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
+    @SuppressWarnings("EmptyMethod")
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
 

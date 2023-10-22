@@ -5,20 +5,17 @@ import com.freezzah.municipality.blocks.IMunicipalityBlock;
 import com.freezzah.municipality.blocks.TownhallBlock;
 import com.freezzah.municipality.blocks.entity.TownHallBlockEntity;
 import com.freezzah.municipality.caps.MunicipalityManagerCapabilityProvider;
-import com.freezzah.municipality.client.Localization;
-import com.mojang.datafixers.kinds.Const;
+import com.freezzah.municipality.client.gui.menu.ModMenuType;
+import com.freezzah.municipality.client.gui.screen.TownhallScreen;
+import com.freezzah.municipality.client.gui.screen.UnclaimedTownhallScreen;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -26,11 +23,11 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class EventHandler {
 
-    private static void clientSetup(final FMLClientSetupEvent event) {
-        LOGGER.info("Municipality: Registring menus");
-//        event.enqueueWork(
-//                () -> MenuScreens.register(ModMenuType.TOWNHALL_MENU.get(), TownhallScreen::new)
-//        );
+    public static void clientSetup(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            MenuScreens.register(ModMenuType.TOWNHALL_MENU.get(), TownhallScreen::new);
+            MenuScreens.register(ModMenuType.UNCLAIMED_TOWNHALL_MENU.get(), UnclaimedTownhallScreen::new);
+        });
     }
 
     @SubscribeEvent
@@ -42,17 +39,7 @@ public class EventHandler {
             if (block instanceof TownhallBlock) {
                 TownHallBlockEntity townHallBlockEntity = (TownHallBlockEntity) event.getLevel().getBlockEntity(pos);
                 //If owner of townhall block
-                if (townHallBlockEntity.getOwner() != event.getPlayer()) {
-                    if (!townHallBlockEntity.hasActiveMunicipality()) {
-                        //Break is safe, dont cancel.
-                    } else {
-                        event.getPlayer().sendSystemMessage(Component.literal(Localization.ERROR_TOWNHALL_BREAK_ACTIVE_MUNICIPALITY));
-                        if (event.isCancelable()) event.setCanceled(true);
-                    }
-                } else {
-                    event.getPlayer().sendSystemMessage(Component.literal(Localization.ERROR_TOWNHALL_NOT_OWNER));
-                    if (event.isCancelable()) event.setCanceled(true);
-                }
+                //TODO REDO THIS ENTIRE THING
             }
         }
     }

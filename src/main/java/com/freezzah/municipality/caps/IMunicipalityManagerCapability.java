@@ -35,7 +35,7 @@ public interface IMunicipalityManagerCapability {
                         Direction side, Tag nbt) {
         final CompoundTag compound = (CompoundTag) nbt;
         for (final Tag tag : compound.getList(TAG_MUNICIPALITIES, Tag.TAG_COMPOUND)) {
-            final IMunicipality municipality = Municipality.load((CompoundTag) tag, null);
+            final IMunicipality municipality = Municipality.load((CompoundTag) tag);
             if (municipality != null) {
                 instance.addMunicipality(municipality);
             }
@@ -59,8 +59,9 @@ public interface IMunicipalityManagerCapability {
     List<IMunicipality> getMunicipalities();
 
 
-    IMunicipality getInhabitantInAnyMunicipality(Inhabitant inhabitant);
-    IMunicipality getPlayerInAnyMunicipality(Player player);
+    IMunicipality getMunicipalityByInhabitant(Inhabitant inhabitant);
+
+    boolean existsPlayerInAnyMunicipality(Player player);
 
     boolean existMunicipalityAtBlock(BlockPos pos);
 

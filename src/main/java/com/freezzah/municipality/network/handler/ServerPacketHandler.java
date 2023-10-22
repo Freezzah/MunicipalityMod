@@ -21,11 +21,12 @@ import static com.freezzah.municipality.MunicipalityMod.MUNICIPALITY_MANAGER_CAP
 public class ServerPacketHandler {
     public static void handlePacket(CreateTownhallPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            BlockPos pos = msg.getTownhallBlockPos();
+            BlockPos pos = msg.townhallBlockPos();
             Level level = ctx.get().getSender().level();
             BlockState state = level.getBlockState(pos);
 
             //Validate position
+            //noinspection deprecation
             if(level.hasChunkAt(pos)){
                 //Validate townhall
                 if (state.getBlock() instanceof TownhallBlock) {
@@ -36,13 +37,13 @@ public class ServerPacketHandler {
                         if(!level.isClientSide) {
                             IMunicipalityManagerCapability cap = level
                                     .getCapability(MUNICIPALITY_MANAGER_CAPABILITY, null).resolve().orElse(null);
-                            Player player = level.getPlayerByUUID(msg.getPlayerId());
-                            IMunicipality municipality = cap.createMunicipalityWithPlayer(level, msg.getTownhallBlockPos(), player, msg.getTownhallName());
+                            Player player = level.getPlayerByUUID(msg.playerId());
+                            IMunicipality municipality = cap.createMunicipalityWithPlayer(level, msg.townhallBlockPos(), player, msg.townhallName());
                             //Create failed if null
                             if(municipality == null){
-                                level.getPlayerByUUID(msg.getPlayerId()).sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY_FAILED(msg.getTownhallName(), player.getName())));
+                                level.getPlayerByUUID(msg.playerId()).sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY_FAILED));
                             } else {
-                                level.getPlayerByUUID(msg.getPlayerId()).sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY(msg.getTownhallName(), player.getName())));
+                                level.getPlayerByUUID(msg.playerId()).sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY(msg.townhallName(), player.getName())));
                             }
                         }
                     }

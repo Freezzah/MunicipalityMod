@@ -29,7 +29,7 @@ public class ModItem {
             ITEMS.register(ModItemId.TOWNHALL_BLOCK_ITEM_ID, () -> new ItemNameBlockItem(ModBlock.TOWNHALL_BLOCK.get(), new Item.Properties()));
 
     public static RegistryObject<Item> TOWNHALL_KEY_ITEM =
-            ITEMS.register(ModItemId.TOWNHALL_KEY_ITEM_ID, () -> new MunicipalityKey());
+            ITEMS.register(ModItemId.TOWNHALL_KEY_ITEM_ID, MunicipalityKey::new);
 
     /*
      * Function to call from mod init phase to register all items

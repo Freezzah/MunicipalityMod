@@ -6,10 +6,8 @@ import net.minecraft.world.level.Level;
 import java.util.UUID;
 
 public class Inhabitant implements IInhabitant {
-    private UUID uuid;
-    private String name;
-
-    public Inhabitant(){}
+    private final UUID uuid;
+    private final String name;
 
     public Inhabitant(UUID uuid, String name){
         this.uuid = uuid;
@@ -31,17 +29,8 @@ public class Inhabitant implements IInhabitant {
     }
 
     @Override
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
 }

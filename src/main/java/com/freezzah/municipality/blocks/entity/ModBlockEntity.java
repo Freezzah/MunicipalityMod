@@ -33,6 +33,4 @@ public class ModBlockEntity {
             BLOCKS.register(ModBlockEntityId.BANK_BLOCK_ENTITY_ID, () -> BlockEntityType.Builder.of(
                     BankBlockEntity::new, ModBlock.BANK_BLOCK.get()).build(null)
             );
-
-
 }

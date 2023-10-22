@@ -10,6 +10,7 @@ public class ModEventHandler {
     @SubscribeEvent
     public void createTabBuildContent(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+
             event.accept(ModItem.TOWNHALL_BLOCK_ITEM);
             event.accept(ModBlock.TOWNHALL_BLOCK);
             event.accept(ModItem.TOWNHALL_KEY_ITEM);

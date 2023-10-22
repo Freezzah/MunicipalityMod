@@ -9,11 +9,8 @@ public interface IInhabitant {
 
     Player toPlayer(Level level);
 
-    public UUID getUUID();
-    public void setUUID(UUID uuid);
-    public String getName();
-    public void setName(String name);
-    public static Inhabitant fromPlayer(Player player){
-        return new Inhabitant(player.getUUID(), player.getName().toString());
-    }
+    UUID getUUID();
+
+    String getName();
+
 }
