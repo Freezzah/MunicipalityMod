@@ -29,13 +29,13 @@ public class Municipality implements IMunicipality {
     private static final String TAG_INHABITANT_NAME = "playerName";
     private final UUID id;
     private final List<Inhabitant> inhabitants = new ArrayList<>();
+    private final int happiness;
     ///
     /// MUNICIPALITY OWNED PROPERTIES
     ///
     private BlockPos townhallBlockPos;
     private String municipalityName;
     private Inhabitant owner;
-    private final int happiness;
     ///
     /// LOGIC STUFF
     ///
@@ -67,6 +67,10 @@ public class Municipality implements IMunicipality {
         return null;
     }
 
+    public static IMunicipality fromFriendlyByteBuf(FriendlyByteBuf buf) {
+        CompoundTag tag = buf.readNbt();
+        return Municipality.load(tag);
+    }
 
     @Override
     public String getMunicipalityName() {
@@ -91,7 +95,7 @@ public class Municipality implements IMunicipality {
     @Override
     public List<Player> getInhabitantsAsPlayers(Level level) {
         List<Player> players = new ArrayList<>();
-        for (Inhabitant inhabitant : getInhabitants()){
+        for (Inhabitant inhabitant : getInhabitants()) {
             players.add(inhabitant.toPlayer(level));
         }
         return players;
@@ -111,24 +115,16 @@ public class Municipality implements IMunicipality {
         setDirty(true);
     }
 
-    public static IMunicipality fromFriendlyByteBuf(FriendlyByteBuf buf) {
-        CompoundTag tag = buf.readNbt();
-        return Municipality.load(tag);
-    }
-
 
     /////////////////////////
     // NBT stuff
     /////////////////////////
 
-    public boolean isDirty() {
-        return isDirty;
-    }
-
     public void setDirty(boolean dirty) {
         this.isDirty = dirty;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public CompoundTag write(CompoundTag nbt) {
         nbt.putUUID(TAG_MUNICIPALITY_ID, id);
         nbt.putString(TAG_MUNICIPALITY_NAME, municipalityName);
@@ -137,7 +133,7 @@ public class Municipality implements IMunicipality {
         nbt.putString(TAG_OWNER_NAME, owner.getName());
 
         ListTag listInhabitantsTag = new ListTag();
-        for(int i = 0; i < getInhabitants().size(); i++){
+        for (int i = 0; i < getInhabitants().size(); i++) {
             Inhabitant inhabitant = getInhabitants().get(i);
             CompoundTag inhabitantTag = new CompoundTag();
             inhabitantTag.putUUID(TAG_INHABITANT_UUID, inhabitant.getUUID());
@@ -155,7 +151,7 @@ public class Municipality implements IMunicipality {
         townhallBlockPos = BlockPosHelper.read(nbt, TAG_TOWNHALL);
         owner = new Inhabitant(nbt.getUUID(TAG_OWNER_UUID), nbt.getString(TAG_OWNER_NAME));
         ListTag listPlayersTag = nbt.getList(TAG_LIST_INHABITANT_UUID, Tag.TAG_COMPOUND);
-        for(int i = 0; i < listPlayersTag.size(); i++){
+        for (int i = 0; i < listPlayersTag.size(); i++) {
             CompoundTag tag = listPlayersTag.getCompound(i);
             Inhabitant inhabitant = new Inhabitant(tag.getUUID(TAG_INHABITANT_UUID), tag.getString(TAG_INHABITANT_NAME));
             this.inhabitants.add(inhabitant);
@@ -172,10 +168,6 @@ public class Municipality implements IMunicipality {
     @Override
     public FriendlyByteBuf putInByteBuf(FriendlyByteBuf friendlyByteBuf) {
         return friendlyByteBuf.writeNbt(getMunicipalityTag());
-    }
-
-    public void markDirty() {
-        this.isDirty = true;
     }
 
     @Override

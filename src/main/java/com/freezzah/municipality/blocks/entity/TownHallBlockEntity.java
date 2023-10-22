@@ -39,6 +39,7 @@ public class TownHallBlockEntity extends MunicipaliyBlockEntity {
         super.load(compoundTag);
         CompoundTag nbt = compoundTag.getCompound(Constants.MOD_ID);
         UUID ownerUUID = nbt.getUUID("Owner");
+        assert Minecraft.getInstance().level != null;
         this.setOwner(Minecraft.getInstance().level.getPlayerByUUID(ownerUUID));
     }
 }

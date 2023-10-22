@@ -9,7 +9,7 @@ public class Inhabitant implements IInhabitant {
     private final UUID uuid;
     private final String name;
 
-    public Inhabitant(UUID uuid, String name){
+    public Inhabitant(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
     }
@@ -19,7 +19,7 @@ public class Inhabitant implements IInhabitant {
     }
 
     @Override
-    public Player toPlayer(Level level){
+    public Player toPlayer(Level level) {
         return level.getPlayerByUUID(this.uuid);
     }
 

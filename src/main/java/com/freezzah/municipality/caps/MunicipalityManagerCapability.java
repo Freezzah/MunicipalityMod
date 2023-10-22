@@ -21,7 +21,7 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
             return null;
         }
 
-        if(existMunicipalityWithName(townhallName)){
+        if (existMunicipalityWithName(townhallName)) {
             // Exist, don't create
             return null;
         }
@@ -53,7 +53,7 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
     }
 
     @Override
-    public boolean existMunicipalityAtBlock(BlockPos pos){
+    public boolean existMunicipalityAtBlock(BlockPos pos) {
         return municipalities.stream().anyMatch(mun -> mun.getTownhallBlockPos().equals(pos));
     }
 

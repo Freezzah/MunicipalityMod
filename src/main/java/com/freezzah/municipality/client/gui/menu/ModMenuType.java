@@ -13,10 +13,12 @@ public class ModMenuType {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, MOD_ID);
 
-    public static final RegistryObject<MenuType<TownhallMenu>> TOWNHALL_MENU = MENUS.register(ModMenuId.TOWNHALL_MENU_ID, () -> IForgeMenuType.create(TownhallMenu::new));
-    public static final RegistryObject<MenuType<UnclaimedTownhallMenu>> UNCLAIMED_TOWNHALL_MENU = MENUS.register(ModMenuId.UNCLAIMED_TOWNHALL_MENU_ID, () -> IForgeMenuType.create(UnclaimedTownhallMenu::new));
-
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);
     }
+
+    public static final RegistryObject<MenuType<TownhallMenu>> TOWNHALL_MENU = MENUS.register(ModMenuId.TOWNHALL_MENU_ID, () -> IForgeMenuType.create(TownhallMenu::new));
+    public static final RegistryObject<MenuType<UnclaimedTownhallMenu>> UNCLAIMED_TOWNHALL_MENU = MENUS.register(ModMenuId.UNCLAIMED_TOWNHALL_MENU_ID, () -> IForgeMenuType.create(UnclaimedTownhallMenu::new));
+
+
 }

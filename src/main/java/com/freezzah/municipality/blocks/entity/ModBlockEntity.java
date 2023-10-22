@@ -25,11 +25,14 @@ public class ModBlockEntity {
     }    /*
      * All Blocks added by this mod.
      */
-    public static RegistryObject<BlockEntityType<TownHallBlockEntity>> TOWNHALL_BLOCK_ENTITY =
+
+    @SuppressWarnings("DataFlowIssue") // Recommended by forge
+    public static final RegistryObject<BlockEntityType<TownHallBlockEntity>> TOWNHALL_BLOCK_ENTITY =
             BLOCKS.register(ModBlockEntityId.TOWNHALL_BLOCK_ENTITY_ID, () -> BlockEntityType.Builder.of(
                     TownHallBlockEntity::new, ModBlock.TOWNHALL_BLOCK.get()).build(null)
             );
-    public static RegistryObject<BlockEntityType<BankBlockEntity>> BANK_BLOCK_ENTITY =
+    @SuppressWarnings("DataFlowIssue")// Recommended by forge
+    public static final RegistryObject<BlockEntityType<BankBlockEntity>> BANK_BLOCK_ENTITY =
             BLOCKS.register(ModBlockEntityId.BANK_BLOCK_ENTITY_ID, () -> BlockEntityType.Builder.of(
                     BankBlockEntity::new, ModBlock.BANK_BLOCK.get()).build(null)
             );

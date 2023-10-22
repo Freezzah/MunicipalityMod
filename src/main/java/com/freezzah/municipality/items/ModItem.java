@@ -11,10 +11,6 @@ import net.minecraftforge.registries.RegistryObject;
 import static com.freezzah.municipality.Constants.MOD_ID;
 
 public class ModItem {
-    /*
-     * Object for default item properties
-     */
-    public static final Item.Properties defaultItemProperties = new Item.Properties();
 
     /*
      * Registry for Items.
@@ -25,10 +21,10 @@ public class ModItem {
     /*
      * All items added by this mod.
      */
-    public static RegistryObject<Item> TOWNHALL_BLOCK_ITEM =
+    public static final RegistryObject<Item> TOWNHALL_BLOCK_ITEM =
             ITEMS.register(ModItemId.TOWNHALL_BLOCK_ITEM_ID, () -> new ItemNameBlockItem(ModBlock.TOWNHALL_BLOCK.get(), new Item.Properties()));
 
-    public static RegistryObject<Item> TOWNHALL_KEY_ITEM =
+    public static final RegistryObject<Item> TOWNHALL_KEY_ITEM =
             ITEMS.register(ModItemId.TOWNHALL_KEY_ITEM_ID, MunicipalityKey::new);
 
     /*

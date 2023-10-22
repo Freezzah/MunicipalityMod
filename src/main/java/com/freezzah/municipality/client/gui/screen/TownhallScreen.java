@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -16,11 +17,11 @@ public class TownhallScreen extends MunicipalityScreen<TownhallMenu> {
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/screen/townhall_screen_background.png");
     @SuppressWarnings("FieldCanBeLocal")
     private final int startOffsetTopEach = 20;
+    private final IMunicipality municipality;
     private int startOffsetTop = this.topPos + 30; //DYNAMIC
     private int startOffsetLeft = this.leftPos + 20;
     @SuppressWarnings("FieldCanBeLocal")
     private int startOffsetLeftMiddle = this.imageWidth / 2 + startOffsetLeft;
-    IMunicipality municipality;
 
     public TownhallScreen(TownhallMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -55,7 +56,7 @@ public class TownhallScreen extends MunicipalityScreen<TownhallMenu> {
     }
 
     @Override
-    protected void renderLabels(GuiGraphics grapics, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull GuiGraphics grapics, int mouseX, int mouseY) {
 
     }
 

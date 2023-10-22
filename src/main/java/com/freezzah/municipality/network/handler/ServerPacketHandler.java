@@ -8,6 +8,7 @@ import com.freezzah.municipality.municipality.IMunicipality;
 import com.freezzah.municipality.network.packet.CreateTownhallPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,28 +23,38 @@ public class ServerPacketHandler {
     public static void handlePacket(CreateTownhallPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             BlockPos pos = msg.townhallBlockPos();
-            Level level = ctx.get().getSender().level();
+            ServerPlayer sender = ctx.get().getSender();
+            if (sender == null) {
+                return;
+            }
+            Level level = sender.level();
             BlockState state = level.getBlockState(pos);
 
             //Validate position
             //noinspection deprecation
-            if(level.hasChunkAt(pos)){
+            if (level.hasChunkAt(pos)) {
                 //Validate townhall
                 if (state.getBlock() instanceof TownhallBlock) {
                     BlockEntity blockEntity = level.getBlockEntity(pos);
                     //Validate BE
                     if (blockEntity instanceof TownHallBlockEntity) {
                         //On server side
-                        if(!level.isClientSide) {
+                        if (!level.isClientSide) {
                             IMunicipalityManagerCapability cap = level
                                     .getCapability(MUNICIPALITY_MANAGER_CAPABILITY, null).resolve().orElse(null);
+                            assert cap != null;
+
                             Player player = level.getPlayerByUUID(msg.playerId());
+                            if (player == null) {
+                                return;
+                            }
                             IMunicipality municipality = cap.createMunicipalityWithPlayer(level, msg.townhallBlockPos(), player, msg.townhallName());
                             //Create failed if null
-                            if(municipality == null){
-                                level.getPlayerByUUID(msg.playerId()).sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY_FAILED));
+                            if (municipality == null) {
+                                player.sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY_FAILED));
                             } else {
-                                level.getPlayerByUUID(msg.playerId()).sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY(msg.townhallName(), player.getName())));
+
+                                player.sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY(msg.townhallName(), player.getName())));
                             }
                         }
                     }

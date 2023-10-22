@@ -33,7 +33,8 @@ public class TownhallBlock extends MunicipalityBlock {
     @Nullable
     @Override
     public MenuProvider getMenuProvider(@NotNull BlockState state, Level level, @NotNull BlockPos pos) {
-        IMunicipalityManagerCapability cap = level.getCapability(MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY).orElseThrow(null);
+        @SuppressWarnings("DataFlowIssue") // TODO
+        IMunicipalityManagerCapability cap = level.getCapability(MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY).orElse(null);
         IMunicipality municipality = cap.getMunicipalityByBlockPos(pos);
         if (municipality == null) {
             // Unclaimed townhall
@@ -52,7 +53,8 @@ public class TownhallBlock extends MunicipalityBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+        @SuppressWarnings("DataFlowIssue") // TODO
         IMunicipalityManagerCapability cap = level.getCapability(MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY).orElseThrow(null);
         IMunicipality municipality = cap.getMunicipalityByBlockPos(pos);
 

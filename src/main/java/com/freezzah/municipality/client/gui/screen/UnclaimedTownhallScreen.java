@@ -19,14 +19,20 @@ import static com.freezzah.municipality.client.Localization.BUTTON_TEXT_CREATE_T
 public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhallMenu> {
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation(Constants.MOD_ID, "textures/gui/screen/townhall_screen_background.png");
     private final Inhabitant inhabitant;
-    private EditBox nameBox;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int editBoxWidth = 150;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int editBoxHeight = 20;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int textWidth = 10;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int textHeight = 10;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int createButtonWidth = 150;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int createButtonHeight = 20;
     int totalHeightOffset = 0;
-    int editBoxWidth = 150;
-    int editBoxHeight = 20;
-    int textWidth = 10;
-    int textHeight = 10;
-    int createButtonWidth = 150;
-    int createButtonHeight = 20;
+    private EditBox nameBox;
 
 
     public UnclaimedTownhallScreen(UnclaimedTownhallMenu menu, Inventory playerInventory, Component title) {
@@ -90,7 +96,7 @@ public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhal
     }
 
     @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull GuiGraphics graphics, int mouseX, int mouseY) {
 
     }
 
@@ -99,12 +105,11 @@ public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhal
         graphics.blit(BACKGROUND_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 
-    private <MSG> void sendToServer(CreateTownhallPacket msg){
-        if (msg.townhallName() == null || msg.townhallName().isEmpty()) {
+    private void sendToServer(CreateTownhallPacket msg) {
+        if (msg.townhallName().isEmpty()) {
             //TODO name empty
             return;
-        }
-        else ModPacketHandler.INSTANCE.sendToServer(msg);
+        } else ModPacketHandler.INSTANCE.sendToServer(msg);
         this.onClose();
     }
 }

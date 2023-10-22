@@ -19,9 +19,9 @@ public class ModBlock {
     /*
      * All Blocks added by this mod.
      */
-    public static RegistryObject<TownhallBlock> TOWNHALL_BLOCK =
+    public static final RegistryObject<TownhallBlock> TOWNHALL_BLOCK =
             BLOCKS.register(ModBlockId.TOWNHALL_BLOCK_ID, () -> new TownhallBlock(Localization.SCREEN_TOWNHALL_NAME));
-    public static RegistryObject<BankBlock> BANK_BLOCK =
+    public static final RegistryObject<BankBlock> BANK_BLOCK =
             BLOCKS.register(ModBlockId.BANK_BLOCK_ID, () -> new BankBlock(Localization.SCREEN_BANK_NAME));
 
     /*
