@@ -45,10 +45,8 @@ public class MunicipalityMod {
         LOGGER.info("Municipality: Registring entities");
         ModBlockEntity.register(modEventBus);
         LOGGER.info("Municipality: Registring packet handler");
-        ModPacketHandler.register(modEventBus);
+        ModPacketHandler.register();
 
         LOGGER.info("Municipality: Done registring");
-
-
     }
 }
