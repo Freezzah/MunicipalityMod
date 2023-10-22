@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import static com.freezzah.municipality.client.Localization.BUTTON_TEXT_CREATE_TOWNHALL;
@@ -90,7 +91,7 @@ public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhal
 
     @Override
     public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
@@ -109,7 +110,9 @@ public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhal
         if (msg.townhallName().isEmpty()) {
             //TODO name empty
             return;
-        } else ModPacketHandler.INSTANCE.sendToServer(msg);
+        } else {
+            ModPacketHandler.INSTANCE.send(msg, PacketDistributor.SERVER.noArg());
+        }
         this.onClose();
     }
 }

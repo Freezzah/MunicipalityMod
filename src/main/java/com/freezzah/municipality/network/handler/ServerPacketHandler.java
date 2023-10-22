@@ -13,17 +13,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import static com.freezzah.municipality.MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY;
 
 public class ServerPacketHandler {
-    public static void handlePacket(CreateTownhallPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
+    public static void handlePacket(CreateTownhallPacket msg, CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
             BlockPos pos = msg.townhallBlockPos();
-            ServerPlayer sender = ctx.get().getSender();
+            ServerPlayer sender = ctx.getSender();
             if (sender == null) {
                 return;
             }
@@ -61,6 +59,6 @@ public class ServerPacketHandler {
                 }
             }
         });
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 }

@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,11 +59,10 @@ public class TownhallBlock extends MunicipalityBlock {
 
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             if (municipality == null) {
-                NetworkHooks.openScreen(serverPlayer,
-                        state.getMenuProvider(level, pos), buf -> buf.writeBlockPos(pos));
+                serverPlayer.openMenu(state.getMenuProvider(level, pos), buf -> buf.writeBlockPos(pos));
+
             } else {
-                NetworkHooks.openScreen(serverPlayer,
-                        state.getMenuProvider(level, pos), municipality::putInByteBuf);
+                serverPlayer.openMenu(state.getMenuProvider(level, pos), municipality::putInByteBuf);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

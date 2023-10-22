@@ -5,11 +5,10 @@ import com.freezzah.municipality.network.handler.ServerPacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public record CreateTownhallPacket(@NotNull UUID playerId, @NotNull BlockPos townhallBlockPos,
                                    @NotNull String townhallName) {
@@ -27,9 +26,9 @@ public record CreateTownhallPacket(@NotNull UUID playerId, @NotNull BlockPos tow
                 buf.readComponent().getString());
     }
 
-    public static void handle(@NotNull CreateTownhallPacket msg, @NotNull Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(@NotNull CreateTownhallPacket msg, @NotNull CustomPayloadEvent.Context ctx) {
         Constants.LOGGER.info("Received CreateTownhallPacket on server");
-        ctx.get().enqueueWork(() ->
+        ctx.enqueueWork(() ->
                 ServerPacketHandler.handlePacket(msg, ctx)
         );
     }
