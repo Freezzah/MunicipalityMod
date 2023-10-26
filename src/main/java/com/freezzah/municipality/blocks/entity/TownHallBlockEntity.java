@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class TownHallBlockEntity extends MunicipaliyBlockEntity {
+public class TownHallBlockEntity extends MunicipalityBlockEntity {
 
     private Player owner;
 
@@ -30,7 +30,9 @@ public class TownHallBlockEntity extends MunicipaliyBlockEntity {
     protected void saveAdditional(@NotNull CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         CompoundTag nbt = new CompoundTag();
-        nbt.putUUID("Owner", getOwner().getUUID());
+        if (getOwner() != null) {
+            nbt.putUUID("Owner", getOwner().getUUID());
+        }
         compoundTag.put(Constants.MOD_ID, nbt);
     }
 

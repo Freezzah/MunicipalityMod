@@ -1,7 +1,6 @@
 package com.freezzah.municipality.caps;
 
 import com.freezzah.municipality.entity.Inhabitant;
-import com.freezzah.municipality.municipality.IMunicipality;
 import com.freezzah.municipality.municipality.Municipality;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class MunicipalityManagerCapability implements IMunicipalityManagerCapability {
-    private final List<IMunicipality> municipalities = new ArrayList<>();
+    private final List<Municipality> municipalities = new ArrayList<>();
 
     @Override
     public Municipality createMunicipalityWithPlayer(Level level, BlockPos blockPos, Player player, String townhallName) {
@@ -38,12 +37,12 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
     }
 
     @Override
-    public List<IMunicipality> getMunicipalities() {
+    public List<Municipality> getMunicipalities() {
         return this.municipalities;
     }
 
     @Override
-    public IMunicipality getMunicipalityByInhabitant(Inhabitant inhabitant) {
+    public Municipality getMunicipalityByInhabitant(Inhabitant inhabitant) {
         return getMunicipalities().stream().filter(m -> m.getInhabitants().stream().anyMatch(p -> p.equals(inhabitant))).findFirst().orElse(null);
     }
 
@@ -58,12 +57,12 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
     }
 
     @Override
-    public void addMunicipality(IMunicipality municipality) {
+    public void addMunicipality(Municipality municipality) {
         municipalities.add(municipality);
     }
 
     @Override
-    public IMunicipality getMunicipalityByBlockPos(BlockPos pos) {
+    public Municipality getMunicipalityByBlockPos(BlockPos pos) {
         return municipalities.stream().filter(municipality -> municipality.getTownhallBlockPos().equals(pos)).findFirst().orElse(null);
     }
 }

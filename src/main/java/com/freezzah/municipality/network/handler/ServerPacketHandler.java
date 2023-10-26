@@ -4,7 +4,7 @@ import com.freezzah.municipality.blocks.TownhallBlock;
 import com.freezzah.municipality.blocks.entity.TownHallBlockEntity;
 import com.freezzah.municipality.caps.IMunicipalityManagerCapability;
 import com.freezzah.municipality.client.Localization;
-import com.freezzah.municipality.municipality.IMunicipality;
+import com.freezzah.municipality.municipality.Municipality;
 import com.freezzah.municipality.network.packet.CreateTownhallPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -46,7 +46,7 @@ public class ServerPacketHandler {
                             if (player == null) {
                                 return;
                             }
-                            IMunicipality municipality = cap.createMunicipalityWithPlayer(level, msg.townhallBlockPos(), player, msg.townhallName());
+                            Municipality municipality = cap.createMunicipalityWithPlayer(level, msg.townhallBlockPos(), player, msg.townhallName());
                             //Create failed if null
                             if (municipality == null) {
                                 player.sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY_FAILED));

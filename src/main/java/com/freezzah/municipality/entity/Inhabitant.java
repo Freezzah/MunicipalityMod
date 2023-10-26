@@ -32,5 +32,4 @@ public class Inhabitant implements IInhabitant {
     public String getName() {
         return this.name;
     }
-
 }

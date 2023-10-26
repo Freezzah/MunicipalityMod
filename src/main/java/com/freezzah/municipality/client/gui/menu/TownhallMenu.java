@@ -1,7 +1,6 @@
 package com.freezzah.municipality.client.gui.menu;
 
 import com.freezzah.municipality.blocks.ModBlock;
-import com.freezzah.municipality.municipality.IMunicipality;
 import com.freezzah.municipality.municipality.Municipality;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,9 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class TownhallMenu extends AbstractContainerMenu {
-
     private final ContainerLevelAccess access;
-    private IMunicipality municipality;
+    private Municipality municipality;
 
     public TownhallMenu(int containerId, Inventory inv, FriendlyByteBuf buf) {
         super(ModMenuType.TOWNHALL_MENU.get(), containerId);
@@ -39,7 +37,7 @@ public class TownhallMenu extends AbstractContainerMenu {
         return AbstractContainerMenu.stillValid(this.access, player, ModBlock.TOWNHALL_BLOCK.get());
     }
 
-    public IMunicipality getMunicipality() {
+    public Municipality getMunicipality() {
         return municipality;
     }
 }

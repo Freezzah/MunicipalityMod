@@ -1,5 +1,6 @@
 package com.freezzah.municipality.client.gui.menu;
 
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,6 +20,7 @@ public class ModMenuType {
 
     public static final RegistryObject<MenuType<TownhallMenu>> TOWNHALL_MENU = MENUS.register(ModMenuId.TOWNHALL_MENU_ID, () -> IForgeMenuType.create(TownhallMenu::new));
     public static final RegistryObject<MenuType<UnclaimedTownhallMenu>> UNCLAIMED_TOWNHALL_MENU = MENUS.register(ModMenuId.UNCLAIMED_TOWNHALL_MENU_ID, () -> IForgeMenuType.create(UnclaimedTownhallMenu::new));
+    public static final RegistryObject<MenuType<BankMenu>> BANK_MENU = MENUS.register(ModMenuId.BANK_MENU_ID, () -> new MenuType<>(BankMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
 
 }

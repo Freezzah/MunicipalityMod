@@ -39,7 +39,7 @@ public class EventHandler {
             Block block = event.getState().getBlock();
             if (event.getEntity() instanceof Player) {
                 if (block instanceof IMunicipalityBlock) {
-                    shouldCancel = true;
+                    shouldCancel = false;
                 }
             }
         }
