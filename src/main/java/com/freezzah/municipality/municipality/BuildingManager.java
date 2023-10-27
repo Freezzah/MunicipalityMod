@@ -22,11 +22,11 @@ public class BuildingManager {
     private final Municipality municipality;
     private final Map<BlockPos, IBuilding> buildings = new HashMap<>();
 
-    public BuildingManager(Municipality municipality) {
+    public BuildingManager(@NotNull Municipality municipality) {
         this.municipality = municipality;
     }
 
-    public static @Nullable BuildingManager load(CompoundTag tag, Municipality municipality) {
+    public static @Nullable BuildingManager load(@NotNull CompoundTag tag, @NotNull Municipality municipality) {
         try {
             BuildingManager buildingManager = new BuildingManager(municipality);
             buildingManager.read(tag);
@@ -45,16 +45,16 @@ public class BuildingManager {
         }
     }
 
-    public boolean removeBuilding(BlockPos pos) {
+    public boolean removeBuilding(@NotNull BlockPos pos) {
         buildings.remove(pos);
         return true;
     }
 
-    public List<IBuilding> getBuildings() {
+    public @NotNull List<IBuilding> getBuildings() {
         return this.buildings.values().stream().toList();
     }
 
-    public CompoundTag save(CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
         CompoundTag buildingManager = new CompoundTag();
         ListTag buildings = new ListTag();
         int i = 0;
@@ -74,18 +74,20 @@ public class BuildingManager {
         return tag;
     }
 
-    public void read(CompoundTag tag) {
+    public void read(@NotNull CompoundTag tag) {
         CompoundTag buildingManager = tag.getCompound(TAG_BUILDING_MANAGER);
         ListTag buildings = buildingManager.getList(TAG_BUILDING, Tag.TAG_COMPOUND);
         for (int i = 0; i < buildings.size(); i++) {
             CompoundTag compoundTag = buildings.getCompound(i);
             BlockPos pos = BlockPosHelper.read(compoundTag, TAG_BUILDING_POS);
-            IBuilding building = EnumBuilding.fromByteType(tag.getByte(TAG_BUILDING_TYPE), municipality, pos);
-            if (building == null) {
-                continue;
+            if (pos != null) {
+                IBuilding building = EnumBuilding.fromByteType(tag.getByte(TAG_BUILDING_TYPE), municipality, pos);
+                if (building == null) {
+                    continue;
+                }
+                building.deserializeNBT(compoundTag);
+                this.addBuilding(building);
             }
-            building.deserializeNBT(compoundTag);
-            this.addBuilding(building);
         }
     }
 }

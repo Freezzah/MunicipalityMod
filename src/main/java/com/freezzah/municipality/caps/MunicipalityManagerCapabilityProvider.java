@@ -26,6 +26,7 @@ public class MunicipalityManagerCapabilityProvider implements ICapabilitySeriali
     }
 
     @Override
+    @Nullable
     public Tag serializeNBT() {
         return IMunicipalityManagerCapability.writeNbt(MUNICIPALITY_MANAGER_CAPABILITY, municipalityCapManager);
     }

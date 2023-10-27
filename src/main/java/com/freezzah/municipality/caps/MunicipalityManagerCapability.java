@@ -5,6 +5,8 @@ import com.freezzah.municipality.municipality.Municipality;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,9 @@ import java.util.UUID;
 public class MunicipalityManagerCapability implements IMunicipalityManagerCapability {
     private final List<Municipality> municipalities = new ArrayList<>();
 
+    @Nullable
     @Override
-    public Municipality createMunicipalityWithPlayer(Level level, BlockPos blockPos, Player player, String townhallName) {
+    public Municipality createMunicipalityWithPlayer(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull String townhallName) {
         if (this.existMunicipalityAtBlock(blockPos) || this.existsPlayerInAnyMunicipality(player)) {
             // Exist, don't create
             return null;
@@ -37,32 +40,32 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
     }
 
     @Override
-    public List<Municipality> getMunicipalities() {
+    public @NotNull List<Municipality> getMunicipalities() {
         return this.municipalities;
     }
 
     @Override
-    public Municipality getMunicipalityByInhabitant(Inhabitant inhabitant) {
+    public @Nullable Municipality getMunicipalityByInhabitant(@NotNull Inhabitant inhabitant) {
         return getMunicipalities().stream().filter(m -> m.getInhabitants().stream().anyMatch(p -> p.equals(inhabitant))).findFirst().orElse(null);
     }
 
     @Override
-    public boolean existsPlayerInAnyMunicipality(Player player) {
+    public boolean existsPlayerInAnyMunicipality(@NotNull Player player) {
         return getMunicipalityByInhabitant(Inhabitant.fromPlayer(player)) != null;
     }
 
     @Override
-    public boolean existMunicipalityAtBlock(BlockPos pos) {
+    public boolean existMunicipalityAtBlock(@NotNull BlockPos pos) {
         return municipalities.stream().anyMatch(mun -> mun.getTownhallBlockPos().equals(pos));
     }
 
     @Override
-    public void addMunicipality(Municipality municipality) {
+    public void addMunicipality(@NotNull Municipality municipality) {
         municipalities.add(municipality);
     }
 
     @Override
-    public Municipality getMunicipalityByBlockPos(BlockPos pos) {
+    public @Nullable Municipality getMunicipalityByBlockPos(@NotNull BlockPos pos) {
         return municipalities.stream().filter(municipality -> municipality.getTownhallBlockPos().equals(pos)).findFirst().orElse(null);
     }
 }

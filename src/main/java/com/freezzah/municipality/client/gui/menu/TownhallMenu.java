@@ -10,12 +10,13 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class TownhallMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private Municipality municipality;
 
-    public TownhallMenu(int containerId, Inventory inv, FriendlyByteBuf buf) {
+    public TownhallMenu(int containerId, Inventory inv, @NotNull FriendlyByteBuf buf) {
         super(ModMenuType.TOWNHALL_MENU.get(), containerId);
         access = ContainerLevelAccess.NULL;
         if (!(buf.readerIndex() == 0 && buf.writerIndex() == 0)) {
@@ -37,6 +38,7 @@ public class TownhallMenu extends AbstractContainerMenu {
         return AbstractContainerMenu.stillValid(this.access, player, ModBlock.TOWNHALL_BLOCK.get());
     }
 
+    @Nullable
     public Municipality getMunicipality() {
         return municipality;
     }

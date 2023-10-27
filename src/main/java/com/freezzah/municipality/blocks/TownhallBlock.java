@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TownhallBlock extends MunicipalityBlock {
 
-    public TownhallBlock(String municipalityBlockname) {
+    public TownhallBlock(@NotNull String municipalityBlockname) {
         super(municipalityBlockname);
     }
 

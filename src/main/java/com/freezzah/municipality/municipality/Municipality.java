@@ -58,21 +58,24 @@ public class Municipality {
     ///
     private BuildingManager buildingManager = new BuildingManager(this);
 
-    public Municipality(UUID id) {
+    public Municipality(@NotNull UUID id) {
         this.id = id;
         this.happiness = 100;
         setDirty(true);
     }
 
-    public Municipality(UUID id, BlockPos townhallBlockPos) {
+    public Municipality(@NotNull UUID id, @NotNull BlockPos townhallBlockPos) {
         this(id);
         this.townhallBlockPos = townhallBlockPos;
-        addBuilding(EnumBuilding.fromByteType(BuildingTownhall.type, this, townhallBlockPos));
+        IBuilding building = EnumBuilding.fromByteType(BuildingTownhall.type, this, townhallBlockPos);
+        if (building != null) {
+            addBuilding(building);
+        }
         setDirty(true);
     }
 
     // EXTRACTS MUNICIPALITY WRAPPER
-    public static @Nullable Municipality load(CompoundTag tag) {
+    public static @Nullable Municipality load(@NotNull CompoundTag tag) {
         try {
             UUID id = tag.getUUID(TAG_MUNICIPALITY_ID);
             Municipality municipality = new Municipality(id);
@@ -99,28 +102,28 @@ public class Municipality {
         return municipalityName;
     }
 
-    public void setMunicipalityName(String municipalityName) {
+    public void setMunicipalityName(@NotNull String municipalityName) {
         checkDirty();
         this.municipalityName = municipalityName;
         setDirty(true);
     }
 
-    public List<Inhabitant> getInhabitants() {
+    public @NotNull List<Inhabitant> getInhabitants() {
         checkDirty();
         return this.inhabitants;
     }
 
-    public List<Player> getInhabitantsAsPlayers(Level level) {
+    public @NotNull List<Player> getInhabitantsAsPlayers(@NotNull Level level) {
         checkDirty();
         return getInhabitants().stream().map(inhabitant -> inhabitant.toPlayer(level)).collect(Collectors.toList());
     }
 
-    public boolean isOwner(Inhabitant inhabitant) {
+    public boolean isOwner(@NotNull Inhabitant inhabitant) {
         checkDirty();
         return this.owner.equals(inhabitant);
     }
 
-    public void setOwner(Inhabitant inhabitant) {
+    public void setOwner(@NotNull Inhabitant inhabitant) {
         checkDirty();
         if (!inhabitants.contains(inhabitant)) {
             inhabitants.add(inhabitant);
@@ -134,12 +137,12 @@ public class Municipality {
         return this.happiness;
     }
 
-    public BlockPos getTownhallBlockPos() {
+    public @NotNull BlockPos getTownhallBlockPos() {
         checkDirty();
         return townhallBlockPos;
     }
 
-    public boolean addBuilding(IBuilding building) {
+    public boolean addBuilding(@NotNull IBuilding building) {
         checkDirty();
         setDirty(true);
         return this.buildingManager.addBuilding(building);
@@ -158,7 +161,7 @@ public class Municipality {
         return this.buildingManager.removeBuilding(building.getBlockPos());
     }
 
-    public List<IBuilding> getBuildings() {
+    public @NotNull List<IBuilding> getBuildings() {
         return this.buildingManager.getBuildings();
     }
 
@@ -206,7 +209,7 @@ public class Municipality {
         return nbt;
     }
 
-    public CompoundTag getMunicipalityTag() {
+    public @NotNull CompoundTag getMunicipalityTag() {
         try {
             if (this.municipalityTag == null || this.isDirty) {
                 this.write(new CompoundTag());
@@ -233,7 +236,7 @@ public class Municipality {
         this.municipalityTag = nbt;
     }
 
-    public FriendlyByteBuf putInFriendlyByteBuf(@NotNull FriendlyByteBuf friendlyByteBuf) {
+    public @NotNull FriendlyByteBuf putInFriendlyByteBuf(@NotNull FriendlyByteBuf friendlyByteBuf) {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.put(TAG_MUNICIPALITY, getMunicipalityTag());
         return friendlyByteBuf.writeNbt(compoundTag);

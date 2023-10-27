@@ -14,11 +14,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static com.freezzah.municipality.MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY;
 
 public class ServerPacketHandler {
-    public static void handlePacket(CreateTownhallPacket msg, CustomPayloadEvent.Context ctx) {
+    public static void handlePacket(@NotNull CreateTownhallPacket msg, @NotNull CustomPayloadEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             BlockPos pos = msg.townhallBlockPos();
             ServerPlayer sender = ctx.getSender();

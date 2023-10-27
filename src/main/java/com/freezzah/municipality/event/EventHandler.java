@@ -15,6 +15,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mojang.text2speech.Narrator.LOGGER;
 
@@ -28,12 +29,12 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public void onBlockBreak(BlockEvent.BreakEvent event) {
+    public void onBlockBreak(@NotNull BlockEvent.BreakEvent event) {
         //TODO REDO THIS ENTIRE THING
     }
 
     @SubscribeEvent
-    public void onPlaceEvent(BlockEvent.EntityPlaceEvent event) {
+    public void onPlaceEvent(@NotNull BlockEvent.EntityPlaceEvent event) {
         boolean shouldCancel = false;
         if (!event.getLevel().isClientSide()) {
             Block block = event.getState().getBlock();
@@ -49,7 +50,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public void attachCapabilityEvent(AttachCapabilitiesEvent<Level> event) {
+    public void attachCapabilityEvent(@NotNull AttachCapabilitiesEvent<Level> event) {
         if (event.getObject().dimension().equals(Level.OVERWORLD)) {
             event.addCapability(new ResourceLocation(Constants.MOD_ID, "municipality"), new MunicipalityManagerCapabilityProvider());
 

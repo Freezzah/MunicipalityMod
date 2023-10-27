@@ -2,6 +2,9 @@ package com.freezzah.municipality.entity;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -14,12 +17,13 @@ public class Inhabitant implements IInhabitant {
         this.name = name;
     }
 
-    public static Inhabitant fromPlayer(Player player) {
+    @Contract("_ -> new")
+    public static @NotNull Inhabitant fromPlayer(@NotNull Player player) {
         return new Inhabitant(player.getUUID(), player.getName().toString());
     }
 
     @Override
-    public Player toPlayer(Level level) {
+    public @Nullable Player toPlayer(@NotNull Level level) {
         return level.getPlayerByUUID(this.uuid);
     }
 

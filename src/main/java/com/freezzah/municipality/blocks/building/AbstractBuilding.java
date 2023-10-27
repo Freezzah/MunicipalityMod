@@ -15,7 +15,7 @@ public abstract class AbstractBuilding implements IBuilding {
     }
 
     @Override
-    public Municipality getMunicipality() {
+    public @NotNull Municipality getMunicipality() {
         return municipality;
     }
 
@@ -25,12 +25,12 @@ public abstract class AbstractBuilding implements IBuilding {
     }
 
     @Override
-    public CompoundTag serializeNBT(CompoundTag compoundTag) {
+    public @NotNull CompoundTag serializeNBT(@NotNull CompoundTag compoundTag) {
         return compoundTag;
     }
 
     @Override
-    public CompoundTag deserializeNBT(CompoundTag compoundTag) {
+    public @NotNull CompoundTag deserializeNBT(@NotNull CompoundTag compoundTag) {
         return compoundTag;
     }
 }

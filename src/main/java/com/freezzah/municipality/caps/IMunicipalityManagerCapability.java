@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -56,18 +57,17 @@ public interface IMunicipalityManagerCapability {
                 });
     }
 
-    Municipality createMunicipalityWithPlayer(Level level, BlockPos blockPos, Player player, String townhallName);
+    @Nullable Municipality createMunicipalityWithPlayer(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull String townhallName);
 
-    List<Municipality> getMunicipalities();
+    @NotNull List<Municipality> getMunicipalities();
 
+    @Nullable Municipality getMunicipalityByInhabitant(@NotNull Inhabitant inhabitant);
 
-    Municipality getMunicipalityByInhabitant(Inhabitant inhabitant);
+    boolean existsPlayerInAnyMunicipality(@NotNull Player player);
 
-    boolean existsPlayerInAnyMunicipality(Player player);
+    boolean existMunicipalityAtBlock(@NotNull BlockPos pos);
 
-    boolean existMunicipalityAtBlock(BlockPos pos);
+    void addMunicipality(@NotNull Municipality municipality);
 
-    void addMunicipality(Municipality municipality);
-
-    Municipality getMunicipalityByBlockPos(BlockPos pos);
+    @Nullable Municipality getMunicipalityByBlockPos(@NotNull BlockPos pos);
 }

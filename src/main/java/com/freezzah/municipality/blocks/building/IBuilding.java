@@ -3,15 +3,16 @@ package com.freezzah.municipality.blocks.building;
 import com.freezzah.municipality.municipality.Municipality;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import org.jetbrains.annotations.NotNull;
 
 public interface IBuilding {
-    Municipality getMunicipality();
+    @NotNull Municipality getMunicipality();
 
-    BlockPos getBlockPos();
+    @NotNull BlockPos getBlockPos();
 
-    CompoundTag serializeNBT(CompoundTag compoundTag);
+    @NotNull CompoundTag serializeNBT(@NotNull CompoundTag compoundTag);
 
-    CompoundTag deserializeNBT(CompoundTag compoundTag);
+    @NotNull CompoundTag deserializeNBT(@NotNull CompoundTag compoundTag);
 
     byte getType();
 }

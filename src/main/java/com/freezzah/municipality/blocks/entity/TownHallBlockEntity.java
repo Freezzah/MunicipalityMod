@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -14,15 +15,15 @@ public class TownHallBlockEntity extends MunicipalityBlockEntity {
 
     private Player owner;
 
-    public TownHallBlockEntity(BlockPos pos, BlockState blockState) {
+    public TownHallBlockEntity(@NotNull BlockPos pos, @NotNull BlockState blockState) {
         super(ModBlockEntity.TOWNHALL_BLOCK_ENTITY.get(), pos, blockState);
     }
 
-    public Player getOwner() {
+    public @Nullable Player getOwner() {
         return owner;
     }
 
-    private void setOwner(Player player) {
+    private void setOwner(@NotNull Player player) {
         this.owner = player;
     }
 
@@ -42,6 +43,10 @@ public class TownHallBlockEntity extends MunicipalityBlockEntity {
         CompoundTag nbt = compoundTag.getCompound(Constants.MOD_ID);
         UUID ownerUUID = nbt.getUUID("Owner");
         assert Minecraft.getInstance().level != null;
-        this.setOwner(Minecraft.getInstance().level.getPlayerByUUID(ownerUUID));
+        Player player = Minecraft.getInstance().level.getPlayerByUUID(ownerUUID);
+        if (player != null) {
+            //TODO throw?
+            this.setOwner(player);
+        }
     }
 }
