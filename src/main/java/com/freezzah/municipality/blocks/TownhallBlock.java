@@ -1,7 +1,6 @@
 package com.freezzah.municipality.blocks;
 
 import com.freezzah.municipality.MunicipalityMod;
-import com.freezzah.municipality.blocks.entity.TownHallBlockEntity;
 import com.freezzah.municipality.caps.IMunicipalityManagerCapability;
 import com.freezzah.municipality.client.Localization;
 import com.freezzah.municipality.client.gui.menu.TownhallMenu;
@@ -19,7 +18,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +31,8 @@ public class TownhallBlock extends MunicipalityBlock {
 
     @Nullable
     @Override
-    public MenuProvider getMenuProvider(@NotNull BlockState state, Level level, @NotNull BlockPos pos) {
+    @SuppressWarnings("deprecation")
+    public MenuProvider getMenuProvider(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos) {
         @SuppressWarnings("DataFlowIssue") // TODO
         IMunicipalityManagerCapability cap = level.getCapability(MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY).orElse(null);
         Municipality municipality = cap.getMunicipalityByBlockPos(pos);
@@ -56,7 +55,7 @@ public class TownhallBlock extends MunicipalityBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         @SuppressWarnings("DataFlowIssue") // TODO
         IMunicipalityManagerCapability cap = level.getCapability(MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY).orElseThrow(null);
         Municipality municipality = cap.getMunicipalityByBlockPos(pos);
@@ -70,11 +69,5 @@ public class TownhallBlock extends MunicipalityBlock {
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new TownHallBlockEntity(pos, state);
     }
 }

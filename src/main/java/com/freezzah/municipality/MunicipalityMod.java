@@ -1,7 +1,6 @@
 package com.freezzah.municipality;
 
 import com.freezzah.municipality.blocks.ModBlock;
-import com.freezzah.municipality.blocks.entity.ModBlockEntity;
 import com.freezzah.municipality.caps.IMunicipalityManagerCapability;
 import com.freezzah.municipality.client.gui.menu.ModMenuType;
 import com.freezzah.municipality.event.EventHandler;
@@ -42,8 +41,6 @@ public class MunicipalityMod {
         ModBlock.register(modEventBus);
         LOGGER.info("Municipality: Registring menu types");
         ModMenuType.register(modEventBus);
-        LOGGER.info("Municipality: Registring entities");
-        ModBlockEntity.register(modEventBus);
         LOGGER.info("Municipality: Registring packet handler");
         ModPacketHandler.register();
 
