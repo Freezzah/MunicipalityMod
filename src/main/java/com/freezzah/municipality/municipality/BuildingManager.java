@@ -54,6 +54,17 @@ public class BuildingManager {
         return this.buildings.values().stream().toList();
     }
 
+
+    public boolean existBuildingAtPos(@NotNull BlockPos blockPos) {
+        return buildings.keySet().stream().anyMatch(pos -> pos.equals(blockPos));
+    }
+
+    @Nullable
+    public IBuilding findBuildingAtPos(@NotNull BlockPos blockPos) {
+        BlockPos resultPos = buildings.keySet().stream().filter(pos -> pos.equals(blockPos)).findFirst().orElse(null);
+        return resultPos != null ? buildings.get(resultPos) : null;
+    }
+
     public @NotNull CompoundTag save(@NotNull CompoundTag tag) {
         CompoundTag buildingManager = new CompoundTag();
         ListTag buildings = new ListTag();
@@ -75,13 +86,12 @@ public class BuildingManager {
     }
 
     public void read(@NotNull CompoundTag tag) {
-        CompoundTag buildingManager = tag.getCompound(TAG_BUILDING_MANAGER);
-        ListTag buildings = buildingManager.getList(TAG_BUILDING, Tag.TAG_COMPOUND);
+        ListTag buildings = tag.getList(TAG_BUILDING, Tag.TAG_COMPOUND);
         for (int i = 0; i < buildings.size(); i++) {
             CompoundTag compoundTag = buildings.getCompound(i);
             BlockPos pos = BlockPosHelper.read(compoundTag, TAG_BUILDING_POS);
             if (pos != null) {
-                IBuilding building = EnumBuilding.fromByteType(tag.getByte(TAG_BUILDING_TYPE), municipality, pos);
+                IBuilding building = EnumBuilding.fromByteType(compoundTag.getByte(TAG_BUILDING_TYPE), municipality, pos);
                 if (building == null) {
                     continue;
                 }

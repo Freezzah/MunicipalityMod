@@ -20,6 +20,10 @@ public class TownhallMenu extends AbstractContainerMenu {
         }
     }
 
+    public TownhallMenu(int containerId, Inventory ignoredInv) {
+        super(ModMenuType.TOWNHALL_MENU.get(), containerId);
+    }
+
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {

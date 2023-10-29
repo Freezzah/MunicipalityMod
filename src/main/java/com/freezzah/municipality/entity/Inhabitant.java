@@ -36,4 +36,15 @@ public class Inhabitant implements IInhabitant {
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Inhabitant inhabitant) {
+            return inhabitant.getUUID().equals(getUUID());
+        }
+        if (obj instanceof Player player) {
+            return player.getUUID().equals(getUUID());
+        }
+        return false;
+    }
 }

@@ -36,6 +36,7 @@ public class Municipality {
     private static final String TAG_INHABITANT_UUID = "playerUuid";
     private static final String TAG_INHABITANT_NAME = "playerName";
     private static final String TAG_MUNICIPALITY = "municipality";
+    private static final String TAG_BUILDING_MANAGER = "buildingManager";
 
     ///
     /// NBT related properties
@@ -69,33 +70,17 @@ public class Municipality {
         this.townhallBlockPos = townhallBlockPos;
         IBuilding building = EnumBuilding.fromByteType(BuildingTownhall.type, this, townhallBlockPos);
         if (building != null) {
-            addBuilding(building);
+            addTownhallOnCreate(building);
+        } else {
+            Constants.LOGGER.error(String.format("""
+                    Created Municipality without townhall.\s
+                    UUID: %s,
+                    POS:%s,
+                    """, id, townhallBlockPos));
         }
         setDirty(true);
     }
 
-    // EXTRACTS MUNICIPALITY WRAPPER
-    public static @Nullable Municipality load(@NotNull CompoundTag tag) {
-        try {
-            UUID id = tag.getUUID(TAG_MUNICIPALITY_ID);
-            Municipality municipality = new Municipality(id);
-            municipality.read(tag);
-            return municipality;
-        } catch (Exception e) {
-            Constants.LOGGER.warn("Something went wrong loading the municipalities");
-        }
-        return null;
-    }
-
-    @Nullable
-    public static Municipality fromFriendlyByteBuf(@NotNull FriendlyByteBuf buf) {
-        CompoundTag tag = buf.readNbt();
-        if (tag == null) {
-            return null;
-        }
-        CompoundTag compoundTag = tag.getCompound(TAG_MUNICIPALITY);
-        return Municipality.load(compoundTag);
-    }
 
     public String getMunicipalityName() {
         checkDirty();
@@ -142,27 +127,87 @@ public class Municipality {
         return townhallBlockPos;
     }
 
-    public boolean addBuilding(@NotNull IBuilding building) {
-        checkDirty();
-        setDirty(true);
-        return this.buildingManager.addBuilding(building);
+    // EXTRACTS MUNICIPALITY WRAPPER
+    public static @Nullable Municipality load(@NotNull CompoundTag tag) {
+        try {
+            UUID id = tag.getUUID(TAG_MUNICIPALITY_ID);
+            Municipality municipality = new Municipality(id);
+            municipality.read(tag);
+            return municipality;
+        } catch (Exception e) {
+            Constants.LOGGER.warn("Something went wrong loading the municipalities");
+        }
+        return null;
     }
+
+    @Nullable
+    public static Municipality fromFriendlyByteBuf(@NotNull FriendlyByteBuf buf) {
+        CompoundTag tag = buf.readNbt();
+        if (tag == null) {
+            return null;
+        }
+        CompoundTag compoundTag = tag.getCompound(TAG_MUNICIPALITY);
+        return Municipality.load(compoundTag);
+    }
+
+    public boolean existBuildingAtPos(BlockPos pos) {
+        checkDirty();
+        return buildingManager.existBuildingAtPos(pos);
+    }
+
+    @SuppressWarnings("unused")
+    public IBuilding findBuildingAtPos(BlockPos pos) {
+        checkDirty();
+        return buildingManager.findBuildingAtPos(pos);
+
+    }
+
+    public boolean addBuilding(@NotNull IBuilding building, @NotNull Player player) {
+        return addBuilding(building, Inhabitant.fromPlayer(player));
+    }
+
+    public boolean addBuilding(@NotNull IBuilding building, @NotNull Inhabitant inhabitant) {
+        checkDirty();
+        if (!isInhabitant(inhabitant)) {
+            return false;
+        }
+        boolean result = this.buildingManager.addBuilding(building);
+        if (result)
+            setDirty(true);
+        return result;
+    }
+
+    private void addTownhallOnCreate(IBuilding townhallBlock) {
+        checkDirty();
+        buildingManager.addBuilding(townhallBlock);
+        setDirty(true);
+    }
+
+    private boolean isInhabitant(@NotNull Inhabitant inhabitant) {
+        checkDirty();
+        return this.inhabitants.contains(inhabitant);
+    }
+
+    @SuppressWarnings("unused")
+    public boolean removeBuilding(@NotNull IBuilding building) {
+        checkDirty();
+        boolean result = this.buildingManager.removeBuilding(building.getBlockPos());
+        setDirty(true);
+        return result;
+    }
+
+    @SuppressWarnings("unused")
+    public @NotNull List<IBuilding> getBuildings() {
+        checkDirty();
+        return this.buildingManager.getBuildings();
+    }
+
 
     /////////////////////////
     // NBT stuff
     /////////////////////////
-
     public void setDirty(boolean dirty) {
         this.isDirty = dirty;
-    }
-
-    public boolean removeBuilding(@NotNull IBuilding building) {
-        setDirty(true);
-        return this.buildingManager.removeBuilding(building.getBlockPos());
-    }
-
-    public @NotNull List<IBuilding> getBuildings() {
-        return this.buildingManager.getBuildings();
     }
 
     private void checkDirty() {
@@ -201,7 +246,7 @@ public class Municipality {
             listInhabitantsTag.add(i, inhabitantTag);
         }
         compoundTag.put(TAG_LIST_INHABITANT_UUID, listInhabitantsTag);
-        buildingManager.save(compoundTag);
+        compoundTag = buildingManager.save(compoundTag);
         nbt.put(TAG_MUNICIPALITY, compoundTag);
 
         this.municipalityTag = compoundTag;
@@ -231,7 +276,7 @@ public class Municipality {
             Inhabitant inhabitant = new Inhabitant(tag.getUUID(TAG_INHABITANT_UUID), tag.getString(TAG_INHABITANT_NAME));
             this.inhabitants.add(inhabitant);
         }
-        this.buildingManager = BuildingManager.load(nbt, this);
+        this.buildingManager = BuildingManager.load(nbt.getCompound(TAG_BUILDING_MANAGER), this);
         setDirty(false);
         this.municipalityTag = nbt;
     }
@@ -241,4 +286,5 @@ public class Municipality {
         compoundTag.put(TAG_MUNICIPALITY, getMunicipalityTag());
         return friendlyByteBuf.writeNbt(compoundTag);
     }
+
 }

@@ -24,6 +24,8 @@ public class ModItem {
     public static final RegistryObject<Item> TOWNHALL_BLOCK_ITEM =
             ITEMS.register(ModItemId.TOWNHALL_BLOCK_ITEM_ID, () -> new ItemNameBlockItem(ModBlock.TOWNHALL_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> BANK_BLOCK_ITEM =
+            ITEMS.register(ModItemId.BANK_BLOCK_ITEM_ID, () -> new ItemNameBlockItem(ModBlock.BANK_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> TOWNHALL_KEY_ITEM =
             ITEMS.register(ModItemId.TOWNHALL_KEY_ITEM_ID, MunicipalityKey::new);
 

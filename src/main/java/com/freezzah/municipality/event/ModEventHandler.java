@@ -14,6 +14,8 @@ public class ModEventHandler {
 
             event.accept(ModItem.TOWNHALL_BLOCK_ITEM);
             event.accept(ModBlock.TOWNHALL_BLOCK);
+            event.accept(ModItem.BANK_BLOCK_ITEM);
+            event.accept(ModBlock.BANK_BLOCK);
             event.accept(ModItem.TOWNHALL_KEY_ITEM);
         }
     }

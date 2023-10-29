@@ -1,13 +1,14 @@
 package com.freezzah.municipality.event;
 
 import com.freezzah.municipality.Constants;
-import com.freezzah.municipality.blocks.IMunicipalityBlock;
+import com.freezzah.municipality.blocks.BankBlock;
 import com.freezzah.municipality.caps.MunicipalityManagerCapabilityProvider;
 import com.freezzah.municipality.client.gui.menu.ModMenuType;
 import com.freezzah.municipality.client.gui.screen.TownhallScreen;
 import com.freezzah.municipality.client.gui.screen.UnclaimedTownhallScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -38,12 +39,14 @@ public class EventHandler {
         boolean shouldCancel = false;
         if (!event.getLevel().isClientSide()) {
             Block block = event.getState().getBlock();
-            if (event.getEntity() instanceof Player) {
-                if (block instanceof IMunicipalityBlock) {
-                    shouldCancel = false;
+            if (event.getEntity() instanceof ServerPlayer)
+                if (block instanceof BankBlock bank) {
+                    if (event.getLevel() instanceof Level)
+                        if (event.getEntity() instanceof Player)
+                            shouldCancel = bank.onPlaceBy((Player) event.getEntity(), event.getPlacedBlock().getBlock(), (Level) event.getLevel(), event.getPos());
                 }
-            }
         }
+
         if (event.isCancelable() && shouldCancel) {
             event.setCanceled(true);
         }

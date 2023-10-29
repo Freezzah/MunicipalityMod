@@ -29,6 +29,9 @@ public class MunicipalityKey extends Item {
                             () -> new IllegalArgumentException("LazyOptional must not be empty!")
                     );
             Municipality municipality = cap.getMunicipalityByInhabitant(Inhabitant.fromPlayer(player));
+            if (municipality == null) {
+                return InteractionResult.PASS;
+            }
             if (municipality.isOwner(Inhabitant.fromPlayer(player))) {
                 Player targetPlayer = (Player) livingEntity;
                 municipality.setOwner(Inhabitant.fromPlayer(targetPlayer));
@@ -41,5 +44,4 @@ public class MunicipalityKey extends Item {
         }
         return InteractionResult.PASS;
     }
-
 }

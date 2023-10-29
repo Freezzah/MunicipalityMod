@@ -66,6 +66,10 @@ public class MunicipalityManagerCapability implements IMunicipalityManagerCapabi
 
     @Override
     public @Nullable Municipality getMunicipalityByBlockPos(@NotNull BlockPos pos) {
-        return municipalities.stream().filter(municipality -> municipality.getTownhallBlockPos().equals(pos)).findFirst().orElse(null);
+        Municipality result = municipalities.stream().filter(municipality -> municipality.getTownhallBlockPos().equals(pos)).findFirst().orElse(null);
+        if (result != null) {
+            return result;
+        }
+        return municipalities.stream().filter(municipality -> municipality.existBuildingAtPos(pos)).findFirst().orElse(null);
     }
 }

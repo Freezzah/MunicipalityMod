@@ -12,12 +12,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class UnclaimedTownhallMenu extends AbstractContainerMenu {
 
-    private final BlockPos blockPos;
+    private BlockPos blockPos;
 
     public UnclaimedTownhallMenu(int containerId, Inventory ignoredInv, @NotNull FriendlyByteBuf buf) {
         super(ModMenuType.UNCLAIMED_TOWNHALL_MENU.get(), containerId);
         this.blockPos = buf.readBlockPos();
     }
+
+    public UnclaimedTownhallMenu(int containerId, Inventory ignoredInv) {
+        super(ModMenuType.UNCLAIMED_TOWNHALL_MENU.get(), containerId);
+    }
+
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
     @Override

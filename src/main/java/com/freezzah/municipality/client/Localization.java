@@ -15,6 +15,7 @@ public class Localization {
     public static final String BUTTON_DELETE_MUNICIPALITY = "Delete municipality";
     public static final String UNCLAIMED_TOWNHALL_MENU_TITLE = "Unclaimed townhall";
     public static final String TOWNHALL_MENU_TITLE = "Townhall";
+    public static final String BANK_MENU_TITLE = "Bank";
 
     public static String MUNICIPALITY_NEW_OWNER(String municipalityName, Component oldOwnerName, Component newOwnerName) {
         return String.format("%s has transferred the ownership of %s to %s", oldOwnerName, municipalityName, newOwnerName);
