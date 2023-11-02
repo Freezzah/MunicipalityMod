@@ -14,6 +14,6 @@ public class BuildingTownhall extends AbstractBuilding {
 
     @Override
     public byte getType() {
-        return EnumBuilding.EnumIds.TOWNHALL_BYTE;
+        return type;
     }
 }

@@ -15,6 +15,6 @@ public class BuildingBank extends AbstractBuilding {
 
     @Override
     public byte getType() {
-        return EnumBuilding.EnumIds.BANK_BYTE;
+        return type;
     }
 }
