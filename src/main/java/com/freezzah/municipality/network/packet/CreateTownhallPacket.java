@@ -5,7 +5,7 @@ import com.freezzah.municipality.network.handler.ServerPacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -26,10 +26,8 @@ public record CreateTownhallPacket(@NotNull UUID playerId, @NotNull BlockPos tow
                 buf.readComponent().getString());
     }
 
-    public static void handle(@NotNull CreateTownhallPacket msg, @NotNull CustomPayloadEvent.Context ctx) {
+    public static void handle(@NotNull CreateTownhallPacket msg, NetworkEvent.Context ctx) {
         Constants.LOGGER.info("Received CreateTownhallPacket on server");
-        ctx.enqueueWork(() ->
-                ServerPacketHandler.handlePacket(msg, ctx)
-        );
+        ServerPacketHandler.handlePacket(msg, ctx);
     }
 }

@@ -3,8 +3,8 @@ package com.freezzah.municipality.event;
 import com.freezzah.municipality.blocks.ModBlock;
 import com.freezzah.municipality.items.ModItem;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ModEventHandler {

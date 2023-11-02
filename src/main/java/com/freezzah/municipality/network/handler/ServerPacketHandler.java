@@ -1,23 +1,22 @@
 package com.freezzah.municipality.network.handler;
 
 import com.freezzah.municipality.blocks.TownhallBlock;
-import com.freezzah.municipality.caps.IMunicipalityManagerCapability;
 import com.freezzah.municipality.client.Localization;
 import com.freezzah.municipality.municipality.Municipality;
+import com.freezzah.municipality.municipality.MunicipalityManager;
 import com.freezzah.municipality.network.packet.CreateTownhallPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
-import static com.freezzah.municipality.MunicipalityMod.MUNICIPALITY_MANAGER_CAPABILITY;
-
 public class ServerPacketHandler {
-    public static void handlePacket(@NotNull CreateTownhallPacket msg, @NotNull CustomPayloadEvent.Context ctx) {
+    public static void handlePacket(@NotNull CreateTownhallPacket msg, @NotNull NetworkEvent.Context ctx) {
         ctx.enqueueWork(() -> {
             BlockPos pos = msg.townhallBlockPos();
             ServerPlayer sender = ctx.getSender();
@@ -34,15 +33,13 @@ public class ServerPacketHandler {
                 if (state.getBlock() instanceof TownhallBlock) {
                     //On server side
                     if (!level.isClientSide) {
-                        IMunicipalityManagerCapability cap = level
-                                .getCapability(MUNICIPALITY_MANAGER_CAPABILITY, null).resolve().orElse(null);
-                        assert cap != null;
+                        MunicipalityManager manager = new MunicipalityManager((ServerLevel) level);
 
                         Player player = level.getPlayerByUUID(msg.playerId());
                         if (player == null) {
                             return;
                         }
-                        Municipality municipality = cap.createMunicipalityWithPlayer(level, msg.townhallBlockPos(), player, msg.townhallName());
+                        Municipality municipality = manager.createMunicipalityWithPlayer(msg.townhallBlockPos(), player, msg.townhallName());
                         //Create failed if null
                         if (municipality == null) {
                             player.sendSystemMessage(Component.literal(Localization.MUNICIPALITY_NEW_MUNICIPALITY_FAILED));

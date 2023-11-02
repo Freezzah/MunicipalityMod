@@ -183,15 +183,19 @@ public class Municipality {
         setDirty(true);
     }
 
-    private boolean isInhabitant(@NotNull Inhabitant inhabitant) {
+    public boolean isInhabitant(@NotNull Inhabitant inhabitant) {
         checkDirty();
         return this.inhabitants.contains(inhabitant);
     }
 
     @SuppressWarnings("unused")
     public boolean removeBuilding(@NotNull IBuilding building) {
+        return removeBuilding(building.getBlockPos());
+    }
+
+    public boolean removeBuilding(@NotNull BlockPos pos) {
         checkDirty();
-        boolean result = this.buildingManager.removeBuilding(building.getBlockPos());
+        boolean result = this.buildingManager.removeBuilding(pos);
         setDirty(true);
         return result;
     }

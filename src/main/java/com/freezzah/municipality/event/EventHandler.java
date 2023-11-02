@@ -1,24 +1,19 @@
 package com.freezzah.municipality.event;
 
-import com.freezzah.municipality.Constants;
 import com.freezzah.municipality.blocks.BankBlock;
-import com.freezzah.municipality.caps.MunicipalityManagerCapabilityProvider;
+import com.freezzah.municipality.blocks.IMunicipalityBlock;
 import com.freezzah.municipality.client.gui.menu.ModMenuType;
 import com.freezzah.municipality.client.gui.screen.TownhallScreen;
 import com.freezzah.municipality.client.gui.screen.UnclaimedTownhallScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.NotNull;
-
-import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class EventHandler {
 
@@ -31,7 +26,13 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onBlockBreak(@NotNull BlockEvent.BreakEvent event) {
-        //TODO REDO THIS ENTIRE THING
+        Block block = event.getState().getBlock();
+        if (block instanceof IMunicipalityBlock iMunicipalityBlock) {
+            boolean result = iMunicipalityBlock.onBreak(event.getPos(), event.getLevel(), event.getState(), event.getPlayer());
+            if (!result) {
+                event.setCanceled(true);
+            }
+        }
     }
 
     @SubscribeEvent
@@ -47,18 +48,18 @@ public class EventHandler {
                 }
         }
 
-        if (event.isCancelable() && shouldCancel) {
+        if (shouldCancel) {
             event.setCanceled(true);
         }
     }
 
-    @SubscribeEvent
-    public void attachCapabilityEvent(@NotNull AttachCapabilitiesEvent<Level> event) {
-        if (event.getObject().dimension().equals(Level.OVERWORLD)) {
-            event.addCapability(new ResourceLocation(Constants.MOD_ID, "municipality"), new MunicipalityManagerCapabilityProvider());
-
-        } else {
-            LOGGER.info("Not overworld");
-        }
-    }
+//    @SubscribeEvent
+//    public void attachCapabilityEvent(@NotNull AttachCapabilitiesEvent<Level> event) {
+//        if (event.getObject().dimension().equals(Level.OVERWORLD)) {
+//            event.addCapability(new ResourceLocation(Constants.MOD_ID, "municipality"), new MunicipalityManagerCapabilityProvider());
+//
+//        } else {
+//            LOGGER.info("Not overworld");
+//        }
+//    }
 }

@@ -9,10 +9,11 @@ import com.freezzah.municipality.network.packet.CreateTownhallPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import static com.freezzah.municipality.client.Localization.BUTTON_TEXT_CREATE_TOWNHALL;
@@ -80,6 +81,10 @@ public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhal
     }
 
     private void renderCreateButton() {
+        BlockPos pos = menu.getBlockPos();
+        if (pos == null) {
+            return;
+        }
         addRenderableWidget(new Button.Builder(
                 Component.literal(BUTTON_TEXT_CREATE_TOWNHALL),
                 button -> this.sendToServer(new CreateTownhallPacket(inhabitant.getUUID(), menu.getBlockPos(), nameBox.getValue())))
@@ -111,7 +116,7 @@ public class UnclaimedTownhallScreen extends MunicipalityScreen<UnclaimedTownhal
             //TODO name empty
             return;
         } else {
-            ModPacketHandler.INSTANCE.send(msg, PacketDistributor.SERVER.noArg());
+            ModPacketHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(), msg);
         }
         this.onClose();
     }
